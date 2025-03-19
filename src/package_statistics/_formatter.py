@@ -43,7 +43,7 @@ def format_stats_output(
         )
     )
     header_separator: str = "-" * len(header)
-    result: str = f"{title}\n{header}\n{header_separator}\n"
+    result: str = f"\n{title}\n{header}\n{header_separator}\n"
 
     for rank, (package, count) in enumerate(package_stats, start=_OFFSET):
         result += (
