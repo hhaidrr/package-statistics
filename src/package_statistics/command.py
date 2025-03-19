@@ -22,7 +22,10 @@ def run():
     file associated with it from a Debian mirror. The program parses the file and outputs the statistics of the
     packages that have the most files associated with them.
     """
-    parser = ArgumentParser(description="Package Statistics")
+    parser = ArgumentParser(
+        description="Downloads a compressed Contents file for a given architecture from a Debian \
+            mirror, parses it, and outputs statistics for packages with the most associated files."
+    )
     initialize_parser(parser)
 
     args: Namespace = parser.parse_args()
