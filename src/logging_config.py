@@ -1,14 +1,16 @@
 import logging
 import sys
-from typing import Final
+from typing import ClassVar, Final
 import os
 
 __all__ = ["initialize_logger"]
 
 
-_ENV_LOG_LEVEL = os.getenv("LOG_LEVEL")
-_ENV_LOG_LEVEL = (
-    logging.getLevelNamesMapping()[_ENV_LOG_LEVEL.upper()] if _ENV_LOG_LEVEL else None
+_ENV_LOG_LEVEL_NAME: str | None = os.getenv("LOG_LEVEL")
+_ENV_LOG_LEVEL: int | None = (
+    logging.getLevelNamesMapping()[_ENV_LOG_LEVEL_NAME.upper()]
+    if _ENV_LOG_LEVEL_NAME
+    else None
 )
 
 _DEFAULT_LOG_LEVEL: Final[int] = logging.INFO
@@ -18,10 +20,22 @@ _LOG_LEVEL: Final[int] = _ENV_LOG_LEVEL or _DEFAULT_LOG_LEVEL
 
 
 class _CustomFormatter(logging.Formatter):
+    _SUBMODULE_PATH_DELIMITER: ClassVar[str] = "."
+    _SUBMODULE_PATH_LIMIT: ClassVar[int] = 3
+
+    @classmethod
+    def _truncate_submodule_path(cls, path: str, limit: int) -> str:
+        path = cls._SUBMODULE_PATH_DELIMITER.join(
+            path.split(cls._SUBMODULE_PATH_DELIMITER)[-limit:]
+        )
+        return path
+
     def format(self, record):
-        is_a_submodule: bool = "." in record.name
-        if type(record.name) is str and is_a_submodule:
-            record.name = ".".join(record.name.split(".")[-2:])
+        is_submodule: bool = self.__class__._SUBMODULE_PATH_DELIMITER in record.name
+        if type(record.name) is str and is_submodule:
+            record.name = self.__class__._truncate_submodule_path(
+                record.name, self._SUBMODULE_PATH_LIMIT
+            )
         return super().format(record)
 
 

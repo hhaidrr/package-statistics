@@ -32,6 +32,7 @@ def decompress_stream(stream: BytesIO) -> str:
     """
     with gzip.GzipFile(fileobj=stream) as compressed:
         decompressed: bytes = compressed.read()
+    result: str = decompressed.decode("utf-8")
 
     logger.info("Decompressed byte stream")
-    return decompressed.decode("utf-8")
+    return result

@@ -12,8 +12,10 @@ def count_package_occurrences(parsed: list[str], limit: int) -> list[tuple[str, 
 
     :param parsed: List of package names.
     :param limit: The maximum number of packages included in the output.
+    :return: A list of tuples containing package names and their counts.
     """
     counter = Counter(parsed)
     package_stats: list[tuple[str, int]] = counter.most_common(limit)
+
     logger.info("Counted package occurrences")
     return package_stats

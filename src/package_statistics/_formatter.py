@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 __all__ = ["format_stats_output"]
 
 
-_OFFSET = 1
+_OFFSET: Final[int] = 1
 NUM_COLUMNS: Final[int] = 3
 
 
@@ -16,12 +16,10 @@ def format_stats_output(
     """
     Format the package statistics output.
 
-    Args:
-        list[tuple[str, int]]: List of tuples containing package names and their counts.
-        limit (int): Limit for the number of packages to display.
-
-    Returns:
-        str: Formatted output string.
+    :param package_stats: List of tuples containing package names and their counts.
+    :param title_text: Title text for the output.
+    :param title_fill_char: Character used to fill the title boundaries.
+    :return: Formatted string of package statistics.
     """
 
     max_rank: int = len(package_stats)
@@ -31,10 +29,11 @@ def format_stats_output(
     max_row_width: int = (
         max_rank_width + max_package_width + max_count_width + (_OFFSET * NUM_COLUMNS)
     )
-    title = "{title:{fill}{align}{width}}".format(
+
+    title: str = "{title:{fill}{align}{width}}".format(
         title=title_text, fill=title_fill_char, align="^", width=max_row_width
     )
-    header = (
+    header: str = (
         "{rank_header:<{r_width}} {package_header:<{p_width}}  {count_header}".format(
             rank_header="",
             r_width=max_rank_width,
@@ -43,8 +42,8 @@ def format_stats_output(
             count_header="Files",
         )
     )
-    header_separator = "-" * len(header)
-    result = f"{title}\n{header}\n{header_separator}\n"
+    header_separator: str = "-" * len(header)
+    result: str = f"{title}\n{header}\n{header_separator}\n"
 
     for rank, (package, count) in enumerate(package_stats, start=_OFFSET):
         result += (

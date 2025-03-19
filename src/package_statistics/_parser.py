@@ -15,8 +15,11 @@ def parse_package_names(content: str) -> list[str]:
     :return: A list of package names.
     """
     lines: list[str] = content.splitlines()
-    package_elements_per_row: list[str] = [line.rpartition(" ")[-1] for line in lines]  # get the last element of each line
+    package_elements_per_row: list[str] = [
+        line.rpartition(" ")[-1] for line in lines
+    ]  # get the last element of each line
     joined_package_names: str = _PACKAGE_DELIMITER.join(package_elements_per_row)
     package_names: list[str] = joined_package_names.split(_PACKAGE_DELIMITER)
+
     logger.info(f"Parsed content index | Package references: {len(package_names)} |")
     return package_names
