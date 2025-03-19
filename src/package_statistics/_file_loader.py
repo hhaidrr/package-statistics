@@ -16,12 +16,8 @@ def download_file_byte_stream(url: str) -> BytesIO:
     :return: The byte stream of the downloaded file.
     """
     logger.info(f"Downloading {url} as byte stream...")
-    chunk_size: int = 8192
     with urllib.request.urlopen(url) as response:
-        stream = BytesIO()
-        while chunk := response.read(chunk_size):
-            stream.write(chunk)
-        stream.seek(0)
+        stream: BytesIO = BytesIO(response.read())
 
     logger.info(f"Download complete! | Size: {stream.getbuffer().nbytes} bytes |")
     return stream
